@@ -1,24 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Sis 🎉</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Happy Birthday 🎉</title>
+<style>
+  :root{
+    --bg:#0b1020;
+    --card:#111428;
+    --accent:#ff6b81;
+    --text:#f5f7fb;
+  }
+  *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+  body{
+    margin:0;
+    background:linear-gradient(180deg,var(--bg),#0e1330);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    overflow:hidden;
+  }
+  .card{
+    background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.2));
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    width:90%;
+    max-width:520px;
+    box-shadow:0 10px 40px rgba(2,6,23,0.6);
+    animation: fadeIn 2s ease forwards;
+  }
+  h1{
+    margin:0;
+    font-size:36px;
+    color:var(--accent);
+  }
+  p{
+    font-size:18px;
+    line-height:1.6;
+    margin-top:12px;
+  }
+  footer{
+    margin-top:24px;
+    font-size:13px;
+    opacity:0.7;
+  }
+  @keyframes fadeIn {
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  /* Confetti animation */
+  canvas.confetti{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:50;
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>🎂 Happy Birthday, My Dear Sister 💖</h1>
-    <p class="msg">You are my biggest blessing.  
-      I’m so lucky to have you in my life.  
-      May your day be filled with smiles and dreams come true. 🌸
-    </p>
-    <button id="surprise">Click for Surprise 🎁</button>
-  </div>
 
-  <canvas id="confetti"></canvas>
-  <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3d87c03e7e.mp3?filename=happy-birthday-110086.mp3"></audio>
+<div class="card">
+  <h1>🎂 Happy Birthday, Big Sis! 🎉</h1>
+  <p>Wishing you a day filled with laughter, warmth, and joy.  
+  You’re the one who makes our world brighter just by being you. 💖</p>
 
-  <script src="script.js"></script>
+  <p>May this year bring you endless smiles, calm days, and beautiful surprises.  
+  You deserve every bit of happiness today and always!</p>
+
+  <footer>— Made with love by your little brother 💕</footer>
+</div>
+
+<canvas class="confetti" id="confetti"></canvas>
+
+<script>
+// Simple confetti animation
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+
+const pieces = Array.from({length:120}).map(()=>({
+  x: Math.random()*innerWidth,
+  y: Math.random()*innerHeight - innerHeight,
+  r: Math.random()*8+3,
+  d: Math.random()*80+20,
+  color: `hsl(${Math.random()*360},70%,60%)`,
+  tilt: Math.random()*Math.PI
+}));
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const p of pieces){
+    ctx.beginPath();
+    ctx.fillStyle = p.color;
+    ctx.ellipse(p.x,p.y,p.r,p.r*0.6,p.tilt,0,Math.PI*2);
+    ctx.fill();
+    p.y += 2 + Math.sin(p.tilt)*1;
+    p.x += Math.sin(p.tilt)*1.5;
+    if(p.y>canvas.height+20){ p.y=-10; p.x=Math.random()*canvas.width; }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
 </body>
 </html>
